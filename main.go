@@ -1,7 +1,25 @@
 package main
 
-import "fmt"
+import (
+	"clipboard/config"
+	"clipboard/db"
+	"clipboard/server"
+	"log"
+)
 
 func main() {
-	fmt.Print("Hello, World!")
+	log.Default().Print("Using config file: ", config.GetConfig().GetString("db.filepath"))
+	_, err := db.InitDb(config.GetConfig().GetString("db.filepath"))
+	if err != nil {
+		panic(err)
+	}
+
+	go func() {
+		server.RunWeb()
+	}()
+
+	go func() {
+		server.RunTcp()
+	}()
+	select {}
 }
