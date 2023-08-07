@@ -15,11 +15,21 @@ func main() {
 	}
 
 	go func() {
-		server.RunWeb()
+		server.RunTcp()
 	}()
 
 	go func() {
-		server.RunTcp()
+		server.RunWeb()
 	}()
 	select {}
 }
+
+//func main() {
+//	r := gin.Default()
+//	r.POST("/", func(c *gin.Context) {
+//		wechat := c.PostForm("wechat")
+//		c.String(200, wechat)
+//	})
+//
+//	r.Run(":8080")
+//}
