@@ -2,6 +2,7 @@ package server
 
 import (
 	"clipboard/config"
+	"clipboard/db"
 	"clipboard/models"
 	"log"
 	"net"
@@ -73,6 +74,10 @@ func init() {
 				// send the message to all clients
 				s := string(message)
 				log.Default().Println("Receive message: ", strings.TrimSpace(s))
+				err := db.AddClipBoard(s)
+				if err != nil {
+					log.Fatal(err)
+				}
 				for _, client := range clients {
 					client.Write <- message
 				}

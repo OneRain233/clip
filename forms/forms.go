@@ -19,3 +19,8 @@ type GetClipBoardListResponse struct {
 	Code int                      `json:"code"`
 	Data []models.ClipBoardEntity `json:"data"`
 }
+
+type GetLatestClipBoardResponse struct {
+	Code int                    `json:"code"`
+	Data models.ClipBoardEntity `json:"data"`
+}

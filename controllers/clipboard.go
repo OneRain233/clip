@@ -16,6 +16,19 @@ func AddClipBoard(c *gin.Context) {
 	models.WriteChan <- []byte(content)
 }
 
+func GetLatestClipBoard(c *gin.Context) {
+	content, err := db.GetLatestClipBoard()
+	if err != nil {
+		c.JSON(500, gin.H{"error": err.Error()})
+		return
+	}
+	var resp forms.GetLatestClipBoardResponse
+	resp.Code = 0
+	resp.Data = content
+	c.JSON(200, resp)
+	return
+}
+
 func GetClipBoardList(c *gin.Context) {
 	var req forms.GetClipBoardListRequest
 	if err := c.ShouldBindJSON(&req); err != nil {

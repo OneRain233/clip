@@ -15,9 +15,21 @@ import (
 var conn net.Conn
 var clipBoardType string
 
+const Help = `
+Usage:
+	clipboard [options]
+Options:
+	-h, --help
+		Show this help message and exit
+	--host <host>
+		Host to connect to
+	--port <port>
+		Port to connect to
+`
+
 func Connect(host string, port int) error {
 	var err error
-	conn, err = net.Dial("tcp", "localhost:8081") // "localhost:8081
+	conn, err = net.Dial("tcp", fmt.Sprintf("%s:%d", host, port))
 	if err != nil {
 		return err
 	}
@@ -97,13 +109,19 @@ func main() {
 	host := flag.String("host", "localhost", "host")
 	port := flag.Int("port", 8081, "port")
 	flag.Parse()
+	// print help
+	if len(os.Args) == 1 || os.Args[1] == "-h" || os.Args[1] == "--help" {
+		fmt.Println(Help)
+		return
+	}
 	for {
 		err := Connect(*host, *port)
 		if err == nil {
 			break
 		}
-		time.Sleep(5 * time.Second)
+		time.Sleep(1 * time.Second)
 	}
+	log.Default().Println("Connected to server")
 	GetClipBoardEnv()
 	handleConnection()
 }

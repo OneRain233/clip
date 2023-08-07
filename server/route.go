@@ -11,6 +11,7 @@ func RunWeb() {
 
 	route.POST("/clipboard/add", controllers.AddClipBoard)
 	route.GET("/clipboard/list", controllers.GetClipBoardList)
+	route.GET("/clipboard/latest", controllers.GetLatestClipBoard)
 	//route.GET("/clipboard/add", controllers.AddClipBoard)
 	port := config.GetConfig().GetString("web.port")
 	if port == "" {

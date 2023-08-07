@@ -6,6 +6,7 @@ import (
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"os"
+	"time"
 )
 
 var db *gorm.DB
@@ -51,6 +52,7 @@ func AddClipBoard(content string) error {
 	entity := models.ClipBoardEntity{
 		Content: content,
 		Hash:    hash,
+		Time:    time.Now().String(),
 	}
 	return db.Create(&entity).Error
 }
@@ -58,4 +60,9 @@ func AddClipBoard(content string) error {
 func GetClipBoard(offset, limit int) ([]models.ClipBoardEntity, error) {
 	var entities []models.ClipBoardEntity
 	return entities, db.Offset(offset).Limit(limit).Find(&entities).Error
+}
+
+func GetLatestClipBoard() (models.ClipBoardEntity, error) {
+	var entity models.ClipBoardEntity
+	return entity, db.Last(&entity).Error
 }
