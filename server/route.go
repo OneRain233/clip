@@ -12,6 +12,9 @@ func RunWeb() {
 	route.POST("/clipboard/add", controllers.AddClipBoard)
 	route.GET("/clipboard/list", controllers.GetClipBoardList)
 	//route.GET("/clipboard/add", controllers.AddClipBoard)
-
-	route.Run(config.GetConfig().GetString("web.port"))
+	port := config.GetConfig().GetString("web.port")
+	if port == "" {
+		port = "8080"
+	}
+	route.Run(":" + port)
 }
