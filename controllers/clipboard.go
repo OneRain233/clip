@@ -4,16 +4,34 @@ import (
 	"clipboard/db"
 	"clipboard/forms"
 	"clipboard/models"
+	"encoding/json"
 	"github.com/gin-gonic/gin"
+	"time"
 )
 
 //var db *gorm.DB
 
 func AddClipBoard(c *gin.Context) {
 	var content string
+	var deviceId string
+	var deviceType string
+
 	content, _ = c.GetPostForm("content")
+	deviceId, _ = c.GetPostForm("device_id")
+	deviceType, _ = c.GetPostForm("device_type")
 	//content = utils.GetBase64([]byte(content))
-	models.WriteChan <- []byte(content)
+	messageEntity := models.TCPMessage{
+		DeviceId:   deviceId,
+		DeviceType: deviceType,
+		Timestamp:  time.Now().Unix(),
+		Data:       content,
+	}
+	message, err := json.Marshal(messageEntity)
+	if err != nil {
+		c.JSON(500, gin.H{"error": err.Error()})
+		return
+	}
+	models.WriteChan <- message
 }
 
 func GetLatestClipBoard(c *gin.Context) {

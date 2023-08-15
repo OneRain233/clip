@@ -77,6 +77,7 @@ func RunTcp() {
 	defer listener.Close()
 	log.Default().Print("Listening on port: ", port)
 
+	go HandleClients()
 	for {
 		conn, err := listener.Accept()
 		if err != nil {
@@ -113,8 +114,4 @@ func HandleClients() {
 			}
 		}
 	}
-}
-
-func init() {
-	go HandleClients()
 }
