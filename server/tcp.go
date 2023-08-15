@@ -29,14 +29,16 @@ func handleConnection(client *models.Client) {
 	timestamp, _ := time.Parse("2006-01-02 15:04:05", latest.Time)
 
 	latestMessage := models.TCPMessage{
-		DeviceId:   "test_PC",
-		DeviceType: "PC",
+		DeviceId:   "server",
+		DeviceType: "server",
 		Timestamp:  timestamp.Unix(),
 		Data:       latest.Content,
 	}
 	latestMessageJson, _ := json.Marshal(latestMessage)
 	conn.Write(latestMessageJson)
 
+	conn.SetReadDeadline(time.Now().Add(10 * time.Second))
+	conn.SetWriteDeadline(time.Now().Add(10 * time.Second))
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
@@ -63,6 +65,15 @@ func handleConnection(client *models.Client) {
 	}()
 
 	wg.Wait()
+
+	// remove client
+	for i, c := range clients {
+		if c.Conn == conn {
+			clients = append(clients[:i], clients[i+1:]...)
+			break
+		}
+		log.Default().Println("Remove client: ", conn.RemoteAddr().String())
+	}
 }
 
 func RunTcp() {
@@ -108,6 +119,9 @@ func HandleClients() {
 				log.Fatal(err)
 			}
 			for _, client := range clients {
+				if client.Conn == nil {
+					continue
+				}
 				log.Default().Println("Sending to client: ", client.Conn.RemoteAddr().String())
 				messageEntityJson, _ := json.Marshal(messageEntity)
 				client.Write <- messageEntityJson
