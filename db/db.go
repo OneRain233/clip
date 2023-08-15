@@ -47,12 +47,12 @@ func InitDb(filepath string) (db *gorm.DB, err error) {
 	return db, nil
 }
 
-func AddClipBoard(content string) error {
+func AddClipBoard(content string, timestamp int64) error {
 	hash := utils.GetHash(content)
 	entity := models.ClipBoardEntity{
 		Content: content,
 		Hash:    hash,
-		Time:    time.Now().String(),
+		Time:    time.Unix(timestamp, 0).Format("2006-01-02 15:04:05"),
 	}
 	return db.Create(&entity).Error
 }

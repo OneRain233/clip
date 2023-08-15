@@ -14,3 +14,10 @@ type Client struct {
 	Write chan []byte
 	Read  chan []byte
 }
+
+type TCPMessage struct {
+	DeviceId   string `json:"device_id"`
+	DeviceType string `json:"device_type"`
+	Timestamp  int64  `json:"timestamp"`
+	Data       string `json:"data"`
+}
