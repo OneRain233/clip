@@ -32,10 +32,10 @@ go run client/client.go --api_host [Your Server Address] --mode http_send # Send
 ##### Android
 
 You can use Tasker to send your clipboard to server via API.
-`http://[Your Server Address]:[Your Server Port]/api/clipboard/add`
+`http://[Your Server Address]:[Your Server Port]/clipboard/add`
 
 And you can use Tasker to get latest clipboard from server via API.
-`http://[Your Server Address]:[Your Server Port]/api/clipboard/latest`
+`http://[Your Server Address]:[Your Server Port]/clipboard/latest`
 
 ##### iOS
 You can use Automator to send your clipboard to server via API like Android.
