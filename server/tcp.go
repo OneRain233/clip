@@ -1,3 +1,5 @@
+// TODO: Need to add a heartbeat mechanism to detect whether the client is online
+
 package server
 
 import (

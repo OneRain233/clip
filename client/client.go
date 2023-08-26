@@ -286,10 +286,10 @@ func main() {
 	apiHost = *apiAddr
 
 	GetClipBoardEnv()
-	if *mode == "http" {
+	if *mode == "http_send" {
 		sendClipBoardViaHttp()
 		return
-	} else if *mode == "get" {
+	} else if *mode == "http_get" {
 		getLatestClipBoardViaHttp()
 		return
 	}
